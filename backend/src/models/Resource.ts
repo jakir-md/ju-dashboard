@@ -11,10 +11,10 @@ export interface ResourceAttributes {
 export interface ResourceCreationAttributes extends Optional<ResourceAttributes, 'id'> { }
 
 class Resource extends Model<ResourceAttributes, ResourceCreationAttributes> implements ResourceAttributes {
-  public id!: number;
-  public name!: string;
-  public type!: string;
-  public capacity!: number;
+  declare public id: number;
+  declare public name: string;
+  declare public type: string;
+  declare public capacity: number;
 }
 
 Resource.init(
