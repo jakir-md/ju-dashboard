@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../../config/database";
 
-class Resource extends Model {
+export class Resource extends Model {
   public id!: number;
   public name!: string;
   public type!: string;
@@ -17,5 +17,3 @@ Resource.init(
   },
   { sequelize, modelName: "resource" },
 );
-
-export default Resource;
