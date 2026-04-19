@@ -1,6 +1,6 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { createResourceBooking, getResourceBookingErrorMessage } from '../api/bookingApi'
+import { createResourceBooking, getApiErrorMessage } from '../api/bookingApi'
 import type { BookableResource } from '../types/booking'
 
 type Props = {
@@ -50,7 +50,7 @@ export function BookingModal({ resource, open, onClose, onBooked }: Props) {
       setSuccess(true)
       onBooked()
     } catch (err) {
-      setError(getResourceBookingErrorMessage(err))
+      setError(getApiErrorMessage(err))
     } finally {
       setSubmitting(false)
     }

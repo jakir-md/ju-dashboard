@@ -1,23 +1,23 @@
 const stats = [
   {
-    label: 'Navigation modules',
-    value: '12+',
-    hint: 'Overview, ops, halls, clubs, notices & more',
+    label: 'Core REST routes',
+    value: '4',
+    hint: 'GET/POST /resources · GET/POST /bookings · DELETE /bookings/:id',
   },
   {
-    label: 'API-ready flows',
-    value: 'REST',
-    hint: 'Resources & bookings via Express + Sequelize',
+    label: 'API prefix',
+    value: 'v1',
+    hint: 'Mounted at /api/v1 — matches Vite proxy /api → port 5000',
   },
   {
     label: 'Theme modes',
     value: '2',
-    hint: 'Light / dark with persistent preference',
+    hint: 'Light / dark with localStorage preference',
   },
   {
-    label: 'Campus story pages',
-    value: '8',
-    hint: 'Dorms, activities, directory, help & FAQ',
+    label: 'Forms on UI',
+    value: '2',
+    hint: 'Add resource & add booking panels on catalogue + schedule',
   },
 ] as const
 

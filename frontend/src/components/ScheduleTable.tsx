@@ -1,7 +1,7 @@
 import type { ResourceBooking } from '../types/booking'
 
 function resourceName(booking: ResourceBooking): string {
-  return booking.Resource?.name ?? booking.resource?.name ?? `Resource #${booking.resource_id}`
+  return booking.resource?.name ?? `Resource #${booking.resource_id}`
 }
 
 type Props = {

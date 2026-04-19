@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
-import { cancelResourceBooking, listResourceBookings } from '../api/bookingApi'
+import { cancelResourceBooking, listBookableResources, listResourceBookings } from '../api/bookingApi'
+import { AddBookingForm } from '../components/AddBookingForm'
 import { ScheduleTable } from '../components/ScheduleTable'
-import type { ResourceBooking } from '../types/booking'
+import type { BookableResource, ResourceBooking } from '../types/booking'
 
 export function SchedulePage() {
   const [bookings, setBookings] = useState<ResourceBooking[]>([])
+  const [resources, setResources] = useState<BookableResource[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [cancellingId, setCancellingId] = useState<number | null>(null)
@@ -15,10 +17,14 @@ export function SchedulePage() {
     setLoading(true)
     setLoadError(null)
     try {
-      const data = await listResourceBookings()
-      setBookings(data)
+      const [bookingData, resourceData] = await Promise.all([
+        listResourceBookings(),
+        listBookableResources(),
+      ])
+      setBookings(bookingData)
+      setResources(resourceData)
     } catch {
-      setLoadError('Could not load bookings. Is the API running?')
+      setLoadError('Could not load schedule or resources. Is the API running on port 5000?')
     } finally {
       setLoading(false)
     }
@@ -57,36 +63,38 @@ export function SchedulePage() {
 
   return (
     <div className="space-y-8">
+      <AddBookingForm resources={resources} onCreated={() => void load()} />
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-slate-50">Schedule viewer</h2>
-          <p className="mt-1 text-sm text-slate-400">
-            Every reservation in one table—who booked which space and when.
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Booking schedule</h2>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            GET /api/v1/bookings — who booked which resource and when. Cancel sends DELETE /api/v1/bookings/:id.
           </p>
         </div>
         <button
           type="button"
           onClick={() => void load()}
-          className="self-start rounded-xl border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-slate-800"
+          className="self-start rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
         >
-          Refresh schedule
+          Refresh
         </button>
       </div>
 
       {actionError ? (
-        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100">
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-900 dark:text-amber-100">
           {actionError}
         </div>
       ) : null}
 
       {loadError ? (
-        <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-100">
+        <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-800 dark:text-rose-100">
           {loadError}
         </div>
       ) : null}
 
       {loading ? (
-        <div className="h-56 animate-pulse rounded-2xl border border-slate-800 bg-slate-900/60" />
+        <div className="h-56 animate-pulse rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60" />
       ) : (
         <ScheduleTable bookings={bookings} cancellingId={cancellingId} onCancel={handleCancel} />
       )}

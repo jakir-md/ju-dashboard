@@ -7,12 +7,6 @@ const navItems = [
   { to: '/', label: 'Overview', end: true },
   { to: '/resources', label: 'Resources', end: false },
   { to: '/schedule', label: 'Schedule', end: false },
-  { to: '/campus', label: 'Campus', end: false },
-  { to: '/dormitories', label: 'Halls', end: false },
-  { to: '/extracurricular', label: 'Clubs', end: false },
-  { to: '/university-activities', label: 'Activities', end: false },
-  { to: '/directory', label: 'Directory', end: false },
-  { to: '/announcements', label: 'Notices', end: false },
   { to: '/help', label: 'Help', end: false },
 ] as const
 
@@ -137,8 +131,8 @@ export function AppHeader() {
       {/* Slim context line — desktop only (saves mobile vertical space) */}
       <div className="hidden border-t border-slate-200/70 bg-slate-50/80 dark:border-slate-800/70 dark:bg-slate-900/35 lg:block">
         <div className="mx-auto max-w-7xl px-4 py-1.5 text-center text-[11px] leading-snug text-slate-500 dark:text-slate-500">
-          <span className="font-medium text-slate-600 dark:text-slate-400">Whole-university scope:</span>{' '}
-          teaching, research, residences, student life, notices, and operations in one navigation system.
+          <span className="font-medium text-slate-600 dark:text-slate-400">Resource booking:</span>{' '}
+          add catalogue entries, create date-based reservations, and sync with /api/v1 on Express + Sequelize.
         </div>
       </div>
 

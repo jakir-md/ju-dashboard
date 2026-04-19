@@ -1,5 +1,3 @@
-import { dormitoryHalls, extracurricularSpots, universityActivityPillars } from './campusLife'
-
 export type SearchHit = {
   id: string
   title: string
@@ -16,131 +14,48 @@ function h(hit: Omit<SearchHit, 'haystack'> & { haystack?: string }): SearchHit 
 }
 
 function buildCatalog(): SearchHit[] {
-  const pages: SearchHit[] = [
+  return [
     h({
       id: 'page-overview',
       title: 'Overview',
-      description: 'Resource booking dashboard home—quick entry to catalogue, schedule, and campus context.',
+      description: 'Dashboard home — hero, stats, and links to the resource catalogue and booking schedule.',
       to: '/',
-      category: 'Booking dashboard',
-      haystack: 'overview dashboard booking resources schedule ju',
+      category: 'Dashboard',
     }),
     h({
       id: 'page-resources',
       title: 'Resource catalogue',
-      description: 'GET /api/resources — pick a lab, room, or equipment card, then open the booking form.',
+      description: 'GET/POST /api/v1/resources — list bookable items and use the add-resource form.',
       to: '/resources',
-      category: 'Booking',
-      haystack: 'resources catalogue bookable room lab equipment capacity type post',
+      category: 'API',
+      haystack: 'resources catalogue book lab room equipment capacity create',
     }),
     h({
       id: 'page-schedule',
       title: 'Booking schedule',
-      description: 'GET /api/bookings — table of reservations; DELETE /api/bookings/:id to cancel.',
+      description: 'GET/POST/DELETE /api/v1/bookings — add booking form, table, cancel rows.',
       to: '/schedule',
-      category: 'Booking',
-      haystack: 'schedule calendar cancel booking occupancy reservation delete',
-    }),
-    h({
-      id: 'page-campus',
-      title: 'Campus & services',
-      description: 'Transport, guest housing, venue hire, and shared facilities catalogue.',
-      to: '/campus',
-      category: 'Campus',
-    }),
-    h({
-      id: 'page-dormitories',
-      title: 'Halls of residence',
-      description: 'Dormitory information, hall amenities, guest house, and campus photo gallery.',
-      to: '/dormitories',
-      category: 'Residential',
-      haystack: 'dormitory dorm hall residence hostel housing student accommodation',
-    }),
-    h({
-      id: 'page-extracurricular',
-      title: 'Clubs & extracurricular',
-      description: 'Debating, robotics, theatre, volunteering, sports, and wildlife walks on campus.',
-      to: '/extracurricular',
-      category: 'Student life',
-      haystack: 'clubs sports arts debate robotics culture volunteer',
-    }),
-    h({
-      id: 'page-university-activities',
-      title: 'University activities',
-      description: 'Teaching, research, exams, extension, convocation, international relations, and governance.',
-      to: '/university-activities',
-      category: 'Institution',
-      haystack: 'research teaching convocation extension international phd examination',
-    }),
-    h({
-      id: 'page-directory',
-      title: 'Directory',
-      description: 'Faculties and administrative units—structured for future LDAP or HR integration.',
-      to: '/directory',
-      category: 'Directory',
-      haystack: 'faculty office department administration',
-    }),
-    h({
-      id: 'page-announcements',
-      title: 'Notices',
-      description: 'University-wide notices: exams, maintenance, guest lectures, and emergency updates.',
-      to: '/announcements',
-      category: 'Communications',
-      haystack: 'announcement notice news bulletin',
+      category: 'API',
+      haystack: 'schedule booking reservation cancel delete calendar',
     }),
     h({
       id: 'page-help',
-      title: 'Help & contact',
-      description: 'ICT support placeholders, API testing notes, privacy and accessibility templates.',
+      title: 'Help & templates',
+      description: 'ICT placeholders, privacy and accessibility sections for your submission pack.',
       to: '/help',
       category: 'Support',
-      haystack: 'help contact support privacy accessibility api postman',
+      haystack: 'help contact privacy accessibility',
     }),
     h({
       id: 'page-faq',
-      title: 'FAQ — frequently asked questions',
-      description: 'Booking rules, theme toggle, API proxy, dormitory demo data, and governance templates.',
+      title: 'FAQ',
+      description: 'Common questions about booking flow, theme, and API base URL.',
       to: '/',
       hash: 'site-faq',
       category: 'Help',
-      haystack: 'faq questions answers booking theme localstorage proxy',
+      haystack: 'faq questions answers api proxy theme',
     }),
   ]
-
-  const halls: SearchHit[] = dormitoryHalls.map((d) =>
-    h({
-      id: `hall-${d.id}`,
-      title: d.name,
-      description: d.subtitle,
-      to: '/dormitories',
-      category: 'Halls',
-      haystack: [d.name, d.subtitle, d.description, ...d.highlights].join(' '),
-    }),
-  )
-
-  const clubs: SearchHit[] = extracurricularSpots.map((s) =>
-    h({
-      id: `club-${s.id}`,
-      title: s.title,
-      description: s.description,
-      to: '/extracurricular',
-      category: s.category,
-      haystack: [s.title, s.category, s.description].join(' '),
-    }),
-  )
-
-  const pillars: SearchHit[] = universityActivityPillars.map((p) =>
-    h({
-      id: `pillar-${p.id}`,
-      title: p.title,
-      description: p.summary,
-      to: '/university-activities',
-      category: 'Activities',
-      haystack: [p.title, p.summary, ...p.examples].join(' '),
-    }),
-  )
-
-  return [...pages, ...halls, ...clubs, ...pillars]
 }
 
 export const searchCatalog: SearchHit[] = buildCatalog()
@@ -185,7 +100,6 @@ function scoreHit(hit: SearchHit, q: string): number {
   }
 
   if (hay.includes(q) && score === 0) score = 20
-
-  if (hit.category === 'Booking' || hit.category === 'Booking dashboard') score += 8
+  if (hit.category === 'API' || hit.category === 'Dashboard') score += 6
   return score
 }

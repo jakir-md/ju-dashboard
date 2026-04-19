@@ -1,9 +1,9 @@
 /**
- * Domain types for the resource booking dashboard (REST: /api/resources, /api/bookings).
- * Field names mirror Sequelize / Express JSON responses (snake_case).
+ * Domain types aligned with the Express + Sequelize backend (`/api/v1/*`).
+ * JSON uses snake_case to match model fields.
  */
 
-/** A room or equipment item that can be reserved. */
+/** `resource` table — bookable room or equipment. */
 export type BookableResource = {
   id: number
   name: string
@@ -11,22 +11,27 @@ export type BookableResource = {
   capacity: number
 }
 
-/** A confirmed (or default-status) reservation for one resource on one date. */
+/** `booking` row; `include` uses `as: "resource"` so nested data is under `resource`. */
 export type ResourceBooking = {
   id: number
   resource_id: number
   requested_by: string
+  /** DATEONLY from MySQL — ISO date string in JSON */
   booking_date: string
   status: string
-  /** Sequelize often nests as `Resource` */
-  Resource?: BookableResource
-  /** Alternate association key */
   resource?: BookableResource
 }
 
-/** Request body for POST /api/bookings */
+/** POST /api/v1/bookings body (see `bookings.services.addBooking`). */
 export type CreateResourceBookingPayload = {
   resource_id: number
   requested_by: string
   booking_date: string
+}
+
+/** POST /api/v1/resources body (see `Resource` model). */
+export type CreateBookableResourcePayload = {
+  name: string
+  type: string
+  capacity: number
 }

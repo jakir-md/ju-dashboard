@@ -3,7 +3,7 @@ import { useId, useState } from 'react'
 const faqItems = [
   {
     q: 'What is JU-Dashboard used for?',
-    a: 'Primarily a resource booking dashboard: browse bookable rooms/equipment (GET /api/resources), create reservations (POST /api/bookings), and manage the live schedule (GET/DELETE /api/bookings). Campus pages are contextual extras around that core lab flow.',
+    a: 'A resource booking dashboard: add catalogue rows (POST /api/v1/resources), create reservations (POST /api/v1/bookings), list and cancel on the schedule (GET/DELETE /api/v1/bookings). Forms live on the Resources and Schedule pages.',
   },
   {
     q: 'How do resource bookings work?',
@@ -15,11 +15,11 @@ const faqItems = [
   },
   {
     q: 'Where can I see or cancel my booking?',
-    a: 'Use the Schedule page fed by GET /api/bookings. Each row shows who booked which resource and when. Cancel issues DELETE /api/bookings/:id and removes the row immediately in the UI.',
+    a: 'Use the Schedule page fed by GET /api/v1/bookings. Each row shows who booked which resource and when. Cancel issues DELETE /api/v1/bookings/:id (204 No Content) and removes the row immediately in the UI.',
   },
   {
-    q: 'Are dormitory photos and club pages official data?',
-    a: 'They are structured demo content with stock photography. Replace text and images with verified hall office and student affairs material before any public launch.',
+    q: 'What fields does the API expect when I add a resource or booking?',
+    a: 'Resources: name, type (string label), and capacity (positive integer). Bookings: resource_id (must exist), requested_by (display name), and booking_date in YYYY-MM-DD. Validation errors return JSON with an error string the forms surface.',
   },
   {
     q: 'How does light / dark mode work?',
@@ -27,7 +27,7 @@ const faqItems = [
   },
   {
     q: 'Which API base URL does the dev server use?',
-    a: 'By default the Vite dev server proxies /api to http://localhost:5000. Set VITE_API_URL if your Express instance runs elsewhere, or adjust vite.config.ts proxy target.',
+    a: 'The app calls `/api/v1/*` (see `bookingApi.ts`). With Vite dev, requests to `/api/...` are proxied to `http://localhost:5000`. Set `VITE_API_URL` (e.g. `http://localhost:5000`) if you call the API without the proxy.',
   },
   {
     q: 'Who maintains privacy and accessibility statements?',
